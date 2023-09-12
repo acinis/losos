@@ -18,10 +18,9 @@ def eprint(*args: Any, **kwargs: Any) -> None:
     print(*args, file=sys.stderr, **kwargs)
 
 
-def char_at(string: str, index: int) -> str:
-    # TODO CHAR return type
+def char_at(string: str, index: int) -> Char:
     try:
-        return string[index]
+        return Char(string[index])
     except IndexError as e:
         raise
         # `char_at` is used like in book - always when index is valid.
