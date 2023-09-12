@@ -19,4 +19,15 @@ Losos is implementation of [Lox](https://craftinginterpreters.com/) language in 
 
 ## Differences
 
-(This section is work-in-progress)
+- No tool for generating syntax tree classes (tool/GenerateAst.java).
+- \[expr.py\] `Visitor` abstract class and all expression classes are not nested inside `Expr`: `BinaryExpr` instead of `Expr.Binary`, `ExprVisitor` instead of `Expr.Visitor`, etc.
+- \[parser.py\] `_ParseError` class is not nested inside `Parser` class.
+- \[helpers.py\] Whole new file with handy helpers.
+- \[losos.py\] `Losos` class is instantiable and all methods are non-static.
+- \[losos.py\] `Reporter` instance instead of `_had_error` property (see below).
+- \[losos.py\] `error` and `_report` methods moved to `Reporter` class.
+- \[losos.py\] `main` responsibility is to parse args and call `run_*` methods, so I made them public and moved `main` to `__main__.py`.
+- \[losos.py\] `run_prompt` method prints welcome message and will exit after `CTRL+Z` followed by `RETURN`.
+- \[reporter.py\] In book, there was `hadError` static boolean flag inside top-level `Lox` class. We have instantiable `Losos` class, and we just cannot call static error method from it. This is minimal error reporter class. It's instance will be passed around, so classes used inside `Losos` (like `Parser` and `Scanner`) can report errors back. Later it may be turned into interface for swapping different error-reporting implementations. For now it's just a way to pass around basic information about encountered errors (just like mentioned flag in book).
+- Java's `char` type: I added class `Char` (in `helpers.py`) for type-hinting single character (see [#2](/../../issues/2) for reasoning).
+- Possibly other minor differences.
