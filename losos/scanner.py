@@ -1,7 +1,7 @@
 from typing import Any, Final
 
 import losos.helpers  # error
-from losos.helpers import char_at, to_float
+from losos.helpers import Char, char_at, to_float
 from losos.reporter import Reporter
 from losos.token import Token
 from losos.tokentype import TokenType
@@ -45,7 +45,7 @@ class Scanner:
         return self._tokens
 
     def _scan_token(self) -> None:
-        c: str = self._advance()  # TODO CHAR type of `c`
+        c: Char = self._advance()
 
         if c == "(":
             self._add_token(TokenType.LEFT_PAREN)
@@ -79,26 +79,26 @@ class Scanner:
 
         elif c == "!":
             self._add_token(
-                TokenType.BANG_EQUAL if self._match("=") else TokenType.BANG
+                TokenType.BANG_EQUAL if self._match(Char("=")) else TokenType.BANG
             )
 
         elif c == "=":
             self._add_token(
-                TokenType.EQUAL_EQUAL if self._match("=") else TokenType.EQUAL
+                TokenType.EQUAL_EQUAL if self._match(Char("=")) else TokenType.EQUAL
             )
 
         elif c == "<":
             self._add_token(
-                TokenType.LESS_EQUAL if self._match("=") else TokenType.LESS
+                TokenType.LESS_EQUAL if self._match(Char("=")) else TokenType.LESS
             )
 
         elif c == ">":
             self._add_token(
-                TokenType.GREATER_EQUAL if self._match("=") else TokenType.GREATER
+                TokenType.GREATER_EQUAL if self._match(Char("=")) else TokenType.GREATER
             )
 
         elif c == "/":
-            if self._match("/"):
+            if self._match(Char("/")):
                 while (self._peek() != "\n") and (not self._is_at_end()):
                     self._advance()
             else:
@@ -164,11 +164,10 @@ class Scanner:
 
         self._add_token(TokenType.STRING, value)
 
-    def _match(self, expected: str) -> bool:
+    def _match(self, expected: Char) -> bool:
         """It's like a conditional advance()
         We only consume the current character if it's what we're looking for
         """
-        # TODO CHAR type of `expected`
 
         if self._is_at_end():
             return False
@@ -180,46 +179,38 @@ class Scanner:
 
         return True
 
-    def _peek(self) -> str:
+    def _peek(self) -> Char:
         """
         ``It's sort of like advance(), but doesn't consume the character.
         This is called lookahead. Since it only looks at the current unconsumed
         character, we have one character of lookahead.``
         """
-        # TODO CHAR return type
 
         if self._is_at_end():
-            return ""
+            return Char("")
 
         return char_at(self._source, self._current)
 
-    def _peek_next(self) -> str:
-        # TODO CHAR return type
-
+    def _peek_next(self) -> Char:
         if self._current + 1 >= len(self._source):
-            return ""
+            return Char("")
 
         return char_at(self._source, self._current + 1)
 
-    def _is_alpha(self, c: str) -> bool:
-        # TODO CHAR type of `c`
+    def _is_alpha(self, c: Char) -> bool:
         return c.isalpha() and c.isascii()  # False for empty str
 
-    def _is_alphanumeric(self, c: str) -> bool:
-        # TODO CHAR type of `c`
+    def _is_alphanumeric(self, c: Char) -> bool:
         return self._is_alpha(c) or self._is_digit(c)
 
-    def _is_digit(self, c: str) -> bool:
-        # TODO CHAR type of `c`
+    def _is_digit(self, c: Char) -> bool:
         return c.isdigit() and c.isascii()
 
     def _is_at_end(self) -> bool:
         return self._current >= len(self._source)
 
-    def _advance(self) -> str:
+    def _advance(self) -> Char:
         """Consume next character in the source and return it."""
-        # TODO CHAR return type
-
         current: int = self._current
         self._current += 1
         return char_at(self._source, current)
