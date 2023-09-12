@@ -8,6 +8,7 @@ from losos.parser import Parser
 from losos.reporter import Reporter
 from losos.scanner import Scanner
 from losos.token import Token
+from losos.version import __version__
 
 
 class Losos:
@@ -30,6 +31,7 @@ class Losos:
             sys.exit(65)
 
     def run_prompt(self) -> None:
+        print("Losos v" + __version__)
         print("Use exit() or Ctrl-Z plus Return to exit\n")
 
         while True:
