@@ -1,5 +1,6 @@
 # Losos
 
+[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/acinis/losos/releases)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue)](https://www.python.org/)
 [![Mypy strict](https://img.shields.io/badge/mypy-strict-2a6db2)](https://mypy.readthedocs.io/en/stable/)
 [![Code style black](https://img.shields.io/badge/code_style-black-black)](https://black.readthedocs.io/en/stable/)
