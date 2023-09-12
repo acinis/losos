@@ -29,7 +29,7 @@ class Reporter:
 
     # singledispatchmethod cos it's a way priettier than overload
     @singledispatchmethod
-    def error(self, arg: object, message: str) -> None:  # $# type object??
+    def error(self, arg: object, message: str) -> None:
         raise NotImplementedError(
             "INTERNAL_ERROR: Reporter.error(): Unknown argument type(s)"
         )
