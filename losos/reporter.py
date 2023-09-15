@@ -1,5 +1,4 @@
 from functools import singledispatchmethod
-from typing import Iterator
 
 from losos.helpers import eprint
 from losos.token import Token
@@ -8,24 +7,20 @@ from losos.tokentype import TokenType
 
 class Reporter:
     def __init__(self) -> None:
-        self._messages: list[str] = []
+        self._had_error = False
 
     def _report(self, line: int, where: str, message: str) -> None:
-        full_message: str = f"[line {line}] Error{where}: {message}"
-        self._messages.append(full_message)
-        eprint(full_message)
+        eprint("[line ", line, "] Error", where, ": ", message, sep='')
+        self._had_error = True
 
     def clear(self) -> None:
-        self._messages = []
+        self._had_error = False
 
-    def __iter__(self) -> Iterator[str]:
-        return iter(self._messages)
+    def had_error(self) -> bool:
+        return self._had_error
 
     def __bool__(self) -> bool:
-        return bool(self._messages)
-
-    def __len__(self) -> int:
-        return len(self._messages)
+        return self._had_error
 
     # singledispatchmethod cos it's a way priettier than overload
     @singledispatchmethod
