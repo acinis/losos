@@ -10,7 +10,7 @@ class Reporter:
         self._had_error = False
 
     def _report(self, line: int, where: str, message: str) -> None:
-        eprint("[line ", line, "] Error", where, ": ", message, sep='')
+        eprint("[line ", line, "] Error", where, ": ", message, sep="")
         self._had_error = True
 
     def clear(self) -> None:
