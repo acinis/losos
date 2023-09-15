@@ -1,6 +1,7 @@
 from functools import singledispatchmethod
 
 from losos.helpers import eprint
+from losos.runtimeerror import LososRuntimeError
 from losos.token import Token
 from losos.tokentype import TokenType
 
@@ -8,6 +9,7 @@ from losos.tokentype import TokenType
 class Reporter:
     def __init__(self) -> None:
         self._had_error = False
+        self._had_runtime_error = False
 
     def _report(self, line: int, where: str, message: str) -> None:
         eprint("[line ", line, "] Error", where, ": ", message, sep="")
@@ -19,8 +21,11 @@ class Reporter:
     def had_error(self) -> bool:
         return self._had_error
 
+    def had_runtime_error(self) -> bool:
+        return self._had_runtime_error
+
     def __bool__(self) -> bool:
-        return self._had_error
+        return self._had_error or self._had_runtime_error
 
     # singledispatchmethod cos it's a way priettier than overload
     @singledispatchmethod
@@ -42,3 +47,7 @@ class Reporter:
             self._report(token.line, " at end", message)
         else:
             self._report(token.line, " at '" + token.lexeme + "'", message)
+
+    def runtime_error(self, error: LososRuntimeError) -> None:
+        eprint(error.message, "\n[line ", error.token.line, "]", sep="")
+        self._had_runtime_error = True
