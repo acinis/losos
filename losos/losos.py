@@ -1,9 +1,10 @@
-from typing import cast
+from typing import cast, Final
 import sys
 
 from losos.astprinter import AstPrinter
 from losos.expr import Expr
 from losos.helpers import eprint
+from losos.interpreter import Interpreter
 from losos.parser import Parser
 from losos.reporter import Reporter
 from losos.scanner import Scanner
@@ -14,6 +15,7 @@ from losos.version import __version__
 class Losos:
     def __init__(self) -> None:
         self._reporter: Reporter = Reporter()
+        self._interpreter: Final[Interpreter] = Interpreter(reporter=self._reporter)
 
     def run_file(self, path: str) -> None:
         content: str = ""
@@ -27,8 +29,11 @@ class Losos:
 
         self._run(content)
 
-        if self._reporter:
+        if self._reporter.had_error():
             sys.exit(65)
+
+        if self._reporter.had_runtime_error():
+            sys.exit(70)
 
     def run_prompt(self) -> None:
         print("Losos v" + __version__)
@@ -57,8 +62,9 @@ class Losos:
         expression: Expr | None = parser.parse()
 
         # Stop if there was a syntax error.
-        if self._reporter:
+        if self._reporter.had_error():
             return
 
         expression = cast(Expr, expression)
-        print(AstPrinter().print(expression))
+        # print(AstPrinter().print(expression))
+        self._interpreter.interpret(expression)
