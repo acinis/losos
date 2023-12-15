@@ -1,0 +1,2 @@
+-i https://pypi.org/simple
+typing-extensions==4.7.1 ; python_version < '3.12'
