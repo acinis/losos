@@ -17,7 +17,9 @@ class Losos:
         self._reporter: Reporter = Reporter()
         self._interpreter: Final[Interpreter] = Interpreter(reporter=self._reporter)
 
-    def run_file(self, path: str) -> None:
+    def run_file(self, path: str) -> int:
+        # Return exit code instead of calling `sys.exit()` (see #17)
+
         content: str = ""
         try:
             with open(path, "r", encoding="utf-8") as f:
@@ -30,10 +32,12 @@ class Losos:
         self._run(content)
 
         if self._reporter.had_error():
-            sys.exit(65)
+            return 65
 
         if self._reporter.had_runtime_error():
-            sys.exit(70)
+            return 70
+
+        return 0
 
     def run_prompt(self) -> None:
         print("Losos v" + __version__)

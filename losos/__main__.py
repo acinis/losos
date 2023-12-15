@@ -11,7 +11,11 @@ def main(args: list[str]) -> int:
 
     losos: Losos = Losos()
     if len(args) == 2:
-        losos.run_file(args[1])
+        # In book `runFile` will terminate program on error, but here it
+        # will return system status code (or 0 on success).
+        ec: int = losos.run_file(args[1])
+        if ec != 0:
+            return ec
     else:
         losos.run_prompt()
 
